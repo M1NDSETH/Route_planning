@@ -72,7 +72,7 @@ def build_full_route(start, pillars, gate, grid):
 
 
 def visualize(grid, path, pillars, gate_centre, gates):
-    plt.clf()
+    
     plt.figure()
 
     
@@ -91,7 +91,7 @@ def visualize(grid, path, pillars, gate_centre, gates):
     
     
     plt.scatter(gate_centre[0], gate_centre[1])
-    #plt.text(gate_centre[0], gate_centre[1], ' Gate Centre')
+    
     x1_gate=gates[0][0]
     y1_gate=gates[1][0]
     x2_gate=gates[0][1]
