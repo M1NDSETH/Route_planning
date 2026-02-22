@@ -10,7 +10,7 @@ The order of targets for the device: pillars in the order of the *pillars* list,
 
 ## START OF PROGRAM
 
-Before starting the program, the user sets the coordinates of the starting point of the device (*start*), the size of the grid of the program (*grid_size*), the coordinates of the pillars and gates.
+Before starting the program, the user sets the coordinates of the starting point of the device (*start*), the size of the grid of the program (*grid_size_x,grid_size_y*), the coordinates of the pillars and gates.
 
 ## VISUALIZATION
 
