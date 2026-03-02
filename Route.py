@@ -87,35 +87,42 @@ def visualize(grid, path, pillars, gate_centre, gates):
     plt.show()
 
 
-grid_size_x = 30
-grid_size_y = 30
-grid = np.zeros((grid_size_x, grid_size_y))
 
-start = (0, 10)
+def main():
+    grid_size_x = 30
+    grid_size_y = 30
+    grid = np.zeros((grid_size_x, grid_size_y))
 
-pillars = [
-    (25,10),
-    (0,25),
-    (0, 0)
-]
+    start = (0, 10)
 
-gates=[
-    (11,25),
-    (25,15)
-]
-xgate=0
-ygate=0
-for i in gates:
-    xgate=xgate + i[0]
-    ygate=ygate+i[1]
-    grid[i]=1
-gate_centre = (xgate//2, ygate//2)
+    pillars = [
+        (25,10),
+        (0,25),
+        (0, 0)
+    ]
 
-#grid[5:15, 12] = 1
+    gates=[
+        (11,25),
+        (25,15)
+    ]
 
-path = build_full_route(start, pillars, gate_centre, grid)
+    xgate=0
+    ygate=0
+    for i in gates:
+        xgate=xgate + i[0]
+        ygate=ygate+i[1]
+        grid[i]=1
+    gate_centre = (xgate//2, ygate//2)
 
-if path:
-    print("Path length:", len(path))
-    visualize(grid, path, pillars, gate_centre,gates)
+    #grid[5:15, 12] = 1
+
+    path = build_full_route(start, pillars, gate_centre, grid)
+    if path:
+        print("Path length:", len(path))
+        visualize(grid, path, pillars, gate_centre,gates)
+        return 0
+    else:
+        return 1
+
+Route=main()
     
