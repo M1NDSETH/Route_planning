@@ -88,18 +88,15 @@ def visualize(grid, path, pillars, gate_centre, gates):
 
 
 
-def main():
+def main(pillars = [(25,10),
+                    (0,25),
+                    (0, 0)]):
+   
     grid_size_x = 30
     grid_size_y = 30
     grid = np.zeros((grid_size_x, grid_size_y))
 
     start_point = (0, 10)
-
-    pillars = [
-        (25,10),
-        (0,25),
-        (0, 0)
-    ]
 
     gates=[
         (11,25),
@@ -124,5 +121,5 @@ def main():
     else:
         return 1
 
-Route=main()
-    
+if __name__ == "__main__":
+    main()
