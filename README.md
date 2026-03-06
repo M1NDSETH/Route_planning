@@ -1,6 +1,12 @@
 This program builds the shortest route to the targets with its subsequent visualization and the output of the route length in the coordinates of the program grid.
 All object coordinates are specified in the program grid, which is not tied to real coordinates.
 
+## CLASSES
+
+There are two classes implemented in this program:
+1) *GRID* - contains info about size of grid (*x_size, y_size*), coordinates of pillars (*pillars*) and gate posts (*gates*) in this grid.
+2) *AUV* - class for vehicle, contains info about coordinates of vehicle's starting point (*start_point*) and class method for building a route (*build_full_route*)
+
 ## TARGETS
 
 There are two types of targets: pillars and gates.
@@ -10,7 +16,7 @@ The order of targets for the device: pillars in the order of the *pillars* list,
 
 ## START OF PROGRAM
 
-Before starting the program, the user sets the coordinates of the starting point of the device (*start*), the size of the grid of the program (*grid_size_x,grid_size_y*), the coordinates of the pillars and gates.
+Before starting the program, the user sets the coordinates of the starting point of the device (*start_point*), the size of the grid of the program (*grid_size_x, grid_size_y*), the coordinates of the pillars and gates.
 
 ## PROGRAM OPERATION
 
@@ -23,6 +29,10 @@ The user can set the starting point of the device, the positions of the pillars 
 ## VISUALIZATION
 
 The red line on the graph shows the route of the device, the green line shows the goal line, the black squares are the walls or pillars of the gate.
+
+## IMPORT
+
+For correct work user needs to import classes *GRID, AUV* and function *vizualise* for vizualisation of route of vehicle.
 
 
 
