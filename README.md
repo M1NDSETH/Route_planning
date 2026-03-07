@@ -30,10 +30,6 @@ The user can set the starting point of the device, the positions of the pillars 
 
 The red line on the graph shows the route of the device, the green line shows the goal line, the black squares are the walls or pillars of the gate.
 
-## IMPORT
-
-For correct work user needs to import classes *GRID, AUV* and function *vizualise* for vizualisation of route of vehicle.
-
 
 
 
