@@ -25,13 +25,19 @@ class GRID:
 
 
 class AUV:
-    def __init__(self,start_point):
-        self.start_point=start_point
+    def __init__(self,start_point, mission):
+        self.start_point = start_point
+        self.mission = mission
     
-    def build_full_route(self, pillars, gate, grid):
+    def build_full_route(self,pillars, gate, grid):
         full_path = []
         current = self.start_point
-        targets = pillars + [gate]
+        mission = self.mission
+        if mission == 'p':
+            targets = pillars
+        else:
+            targets = [gate]
+        #targets = pillars + [gate]
         for i, target in enumerate(targets):
             temp_grid = grid.copy()
             if target in pillars:
@@ -115,12 +121,14 @@ def main():
         (0,25),
         (0, 0)
     ]
+    
+    mission = 'g'
 
     gates=[
         (11,25),
         (25,15)
     ]
-    VELT=AUV((0,0))
+    VELT=AUV((0,0),mission)
     #grid[5:15, 12] = 1
     grid = GRID(grid_size_x, grid_size_y, pillars, gates)
     
