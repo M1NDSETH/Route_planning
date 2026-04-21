@@ -11,11 +11,13 @@ def heuristic(a, b):
 
 
 class GRID:
-    def __init__(self, x_size, y_size, targets):
+    def __init__(self, x_size, y_size, targets, obstacles):
         self.x_size = x_size
         self.y_size = y_size
         self.targets = targets
         self.field = np.zeros((x_size, y_size))
+        for point in obstacles:
+            self.field[point] = 1
        
 
 
@@ -96,6 +98,8 @@ def main():
     grid_size_x = 30
     grid_size_y = 30
     
+    obstacles = []
+
     pillars = [
         (25,10),
         (0,25),
@@ -104,7 +108,7 @@ def main():
    
     VELT=AUV((0,0))
     #grid[5:15, 12] = 1
-    grid = GRID(grid_size_x, grid_size_y, pillars)
+    grid = GRID(grid_size_x, grid_size_y, pillars, obstacles)
     
     path = VELT.build_full_route(grid.targets, grid.field)
     if path:
@@ -114,5 +118,6 @@ def main():
     else:
         return 1
 
-main()
+if __name__ == "__main__":
+    main()
     
