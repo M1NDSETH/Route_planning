@@ -34,7 +34,7 @@ def line_of_sight(grid, x0, y0, x1, y1):
     for (x,y) in bresenham(x0, y0, x1, y1):
         if grid[x][y] == 1:
             return False
-        return True
+    return True
 
 
 class GRID:
@@ -60,7 +60,7 @@ class AUV:
             for j,p in enumerate(targets):
                 if p != target and j>i:
                     temp_grid[p] = 1   
-            path_segment = astar(current, target, temp_grid)
+            path_segment = theta_star(current, target, temp_grid)
             if path_segment is None:
                 print("Path not found")
                 return None
@@ -73,36 +73,58 @@ class AUV:
 
 
 
-def astar(start, goal, grid):
+
+def theta_star(start, goal, grid):
     rows, cols = grid.shape
     open_set = []
+    
     heapq.heappush(open_set, (0, start))
-    came_from = {}
+    
+    came_from = {start: start} 
     g_score = {start: 0}
+    
     directions = [(-1,0),(1,0),(0,-1),(0,1),
                   (-1,-1),(-1,1),(1,-1),(1,1)]
+    
     while open_set:
         _, current = heapq.heappop(open_set)
+
         if current == goal:
             path = []
-            while current in came_from:
+            while current != came_from[current]:
                 path.append(current)
                 current = came_from[current]
             path.append(start)
             return path[::-1]
+
         for dx, dy in directions:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols:
-                if grid[neighbor] == 1:
-                    continue  
-                tentative_g = g_score[current] + heuristic(current, neighbor)
-                if neighbor not in g_score or tentative_g < g_score[neighbor]:
-                    came_from[neighbor] = current
-                    g_score[neighbor] = tentative_g
-                    f_score = tentative_g + heuristic(neighbor, goal)
-                    heapq.heappush(open_set, (f_score, neighbor))
-    return None  
 
+            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
+                continue
+            if grid[neighbor] == 1:
+                continue
+
+            parent = came_from[current]
+
+            if line_of_sight(grid, parent[0], parent[1], neighbor[0], neighbor[1]):
+                new_g = g_score[parent] + heuristic(parent, neighbor)
+
+                if neighbor not in g_score or new_g < g_score[neighbor]:
+                    g_score[neighbor] = new_g
+                    came_from[neighbor] = parent
+                    f_score = new_g + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
+            else:
+                new_g = g_score[current] + heuristic(current, neighbor)
+
+                if neighbor not in g_score or new_g < g_score[neighbor]:
+                    g_score[neighbor] = new_g
+                    came_from[neighbor] = current
+                    f_score = new_g + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
+
+    return None
 
 
 def visualize(grid, path, targets):
