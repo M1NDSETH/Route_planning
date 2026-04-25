@@ -1,5 +1,6 @@
 from Route import AUV,GRID,visualize
 import random
+import time
 
 def main():
     grid_size_x = 1000
@@ -14,8 +15,10 @@ def main():
     AUV_size = 30
     VELT=AUV((1,1), AUV_size)
     grid = GRID(grid_size_x, grid_size_y, pillars, obstacles)
+    start_time = time.perf_counter()
     grid.obstacles_creation(AUV_size)
-        
+    end_time = time.perf_counter()
+    print(end_time - start_time)    
     path = VELT.build_full_route(grid.targets, grid.field)
 
     if path:
