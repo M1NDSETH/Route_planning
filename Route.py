@@ -2,11 +2,23 @@ import heapq
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import copy
 
 
 
 def heuristic(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+
+def obstacles_inflation(grid, obstacles, inflation_size):
+    for point in obstacles:
+        i = max(0, point[0] - inflation_size)
+        while i <= min(point[0] + inflation_size, grid.x_size - 1):
+            j = max(0, point[1] - inflation_size)
+            while j <= min(point[1] + inflation_size, grid.y_size - 1):
+                if heuristic((i, j), point) <= inflation_size:
+                    grid.field[i][j] = 1
+                j += 1
+            i += 1
 
 
 def bresenham(x0,y0,x1,y1):
@@ -30,10 +42,11 @@ def bresenham(x0,y0,x1,y1):
     return cells
 
 
-def line_of_sight(grid, x0, y0, x1, y1):
+def line_of_sight(grid_field, x0, y0, x1, y1):
     for (x,y) in bresenham(x0, y0, x1, y1):
-        if grid[x][y] == 1:
-            return False
+        if 0 <= x < grid_field.shape[0] and 0 <= y < grid_field.shape[1]:
+            if grid_field[x][y] == 1:
+                return False
     return True
 
 
@@ -44,17 +57,17 @@ class GRID:
         self.targets = targets
         self.obstacles = obstacles
         self.field = np.zeros((x_size, y_size))
-    def obstacles_creation(self,auv_size):
-        for point in self.obstacles:
-            i=point[0]-auv_size
-            while i<=point[0]+auv_size and i<self.x_size:
-                j = point[1]-auv_size
-                while j<=point[1]+auv_size and j<self.y_size:
-                        if heuristic((i,j),point) <= auv_size:
-                            self.field[i][j] = 1
-                        j+=1
-                i+=1
-            self.field[point] = 1
+    # def obstacles_creation(self,auv_size):
+    #     for point in self.obstacles:
+    #         i=point[0]-auv_size
+    #         while i<=point[0]+auv_size and i<self.x_size:
+    #             j = point[1]-auv_size
+    #             while j<=point[1]+auv_size and j<self.y_size:
+    #                     if heuristic((i,j),point) <= auv_size:
+    #                         self.field[i][j] = 1
+    #                     j+=1
+    #             i+=1
+    #         self.field[point] = 1
        
         
 class AUV:
@@ -66,10 +79,12 @@ class AUV:
         full_path = []
         current = self.start_point
         for i, target in enumerate(targets):
-            temp_grid = grid.copy()
+            temp_grid = copy.deepcopy(grid)
+            temp_obstacles = []
             for j,p in enumerate(targets):
                 if p != target and j>i:
-                    temp_grid[p] = 1   
+                    temp_obstacles.append(p)
+            obstacles_inflation(temp_grid, temp_obstacles, self.size) 
             path_segment = theta_star(current, target, temp_grid)
             if path_segment is None:
                 print("Path not found")
@@ -83,7 +98,8 @@ class AUV:
 
 
 def theta_star(start, goal, grid):
-    rows, cols = grid.shape
+    rows = grid.x_size 
+    cols = grid.y_size 
     open_set = []
     heapq.heappush(open_set, (0, start))
     came_from = {start: start} 
@@ -104,10 +120,10 @@ def theta_star(start, goal, grid):
             neighbor = (current[0] + dx, current[1] + dy)
             if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
                 continue
-            if grid[neighbor] == 1:
+            if grid.field[neighbor[0]][neighbor[1]] == 1:
                 continue
             parent = came_from[current]
-            if line_of_sight(grid, parent[0], parent[1], neighbor[0], neighbor[1]):
+            if line_of_sight(grid.field, parent[0], parent[1], neighbor[0], neighbor[1]):
                 new_g = g_score[parent] + heuristic(parent, neighbor)
 
                 if neighbor not in g_score or new_g < g_score[neighbor]:
