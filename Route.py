@@ -9,17 +9,6 @@ import copy
 def heuristic(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
-def obstacles_inflation(grid, obstacles, inflation_size):
-    for point in obstacles:
-        i = max(0, point[0] - inflation_size)
-        while i <= min(point[0] + inflation_size, grid.x_size - 1):
-            j = max(0, point[1] - inflation_size)
-            while j <= min(point[1] + inflation_size, grid.y_size - 1):
-                if heuristic((i, j), point) <= inflation_size:
-                    grid.field[i][j] = 1
-                j += 1
-            i += 1
-
 
 def bresenham(x0,y0,x1,y1):
     cells =[]
@@ -57,17 +46,16 @@ class GRID:
         self.targets = targets
         self.obstacles = obstacles
         self.field = np.zeros((x_size, y_size))
-    # def obstacles_creation(self,auv_size):
-    #     for point in self.obstacles:
-    #         i=point[0]-auv_size
-    #         while i<=point[0]+auv_size and i<self.x_size:
-    #             j = point[1]-auv_size
-    #             while j<=point[1]+auv_size and j<self.y_size:
-    #                     if heuristic((i,j),point) <= auv_size:
-    #                         self.field[i][j] = 1
-    #                     j+=1
-    #             i+=1
-    #         self.field[point] = 1
+    def obstacles_creation(self,inflation_size):
+        for point in self.obstacles:
+            i = max(0, point[0] - inflation_size)
+            while i <= min(point[0] + inflation_size, self.x_size - 1):
+                j = max(0, point[1] - inflation_size)
+                while j <= min(point[1] + inflation_size, self.y_size - 1):
+                    if heuristic((i, j), point) <= inflation_size:
+                        self.field[i][j] = 1
+                    j += 1
+                i += 1
        
         
 class AUV:
@@ -80,11 +68,10 @@ class AUV:
         current = self.start_point
         for i, target in enumerate(targets):
             temp_grid = copy.deepcopy(grid)
-            temp_obstacles = []
             for j,p in enumerate(targets):
                 if p != target and j>i:
-                    temp_obstacles.append(p)
-            obstacles_inflation(temp_grid, temp_obstacles, self.size) 
+                    temp_grid.obstacles.append(p)
+            temp_grid.obstacles_creation(self.size)
             path_segment = theta_star(current, target, temp_grid)
             if path_segment is None:
                 print("Path not found")

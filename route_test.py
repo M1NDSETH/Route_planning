@@ -1,4 +1,4 @@
-from Route import AUV,GRID,visualize,obstacles_inflation
+from Route import AUV,GRID,visualize
 import random
 import time
 
@@ -16,7 +16,7 @@ def main():
     VELT=AUV((1,1), AUV_size)
     grid = GRID(grid_size_x, grid_size_y, pillars, obstacles)
     
-    obstacles_inflation(grid, obstacles, AUV_size)
+    grid.obstacles_creation(AUV_size)
     
     start_time = time.perf_counter()    
     path = VELT.build_full_route(grid.targets, grid)
