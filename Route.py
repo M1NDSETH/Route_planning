@@ -32,10 +32,22 @@ def bresenham(x0,y0,x1,y1):
 
 
 def line_of_sight(grid_field, x0, y0, x1, y1):
-    for (x,y) in bresenham(x0, y0, x1, y1):
+    cells = bresenham(x0, y0, x1, y1)
+    for i in range(len(cells)):
+        x, y = cells[i]
         if 0 <= x < grid_field.shape[0] and 0 <= y < grid_field.shape[1]:
             if grid_field[x][y] == 1:
                 return False
+            if i > 0:
+                prev_x, prev_y = cells[i-1]
+                dx = x - prev_x
+                dy = y - prev_y
+                if dx!=0 and dy!=0:
+                    if grid_field[prev_x + dx][prev_y] == 1 or grid_field[prev_x][prev_y + dy] == 1:
+                        return False
+        else:
+            return False
+        
     return True
 
 
