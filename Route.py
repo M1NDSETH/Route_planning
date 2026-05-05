@@ -6,6 +6,34 @@ import copy
 
 
 
+
+def angle_velocity_output(path, velocity):
+    i = 0
+    print("Angle    Velocity")
+    while i <= len(path) - 2:
+        dx = path[i+1][0] - path[i][0]
+        dy = path[i+1][1] - path[i][1]
+        if i == 0:
+            current_angle = math.degrees(math.atan(dy / dx) * (-1))
+            print(current_angle, velocity)
+        else:
+            prev_angle = current_angle
+
+            if dx > 0:
+                current_angle = math.degrees(math.atan(dy / dx) * (-1))
+            if dx < 0:
+                current_angle = -1 * (math.degrees(math.atan(dy / dx)) + 180)
+            if dx == 0:
+                current_angle = 90.0 * (dy // abs(dy))
+            turn_angle = current_angle - prev_angle
+
+            if 360.0 - abs(turn_angle) < abs(turn_angle) and turn_angle != 0:
+                turn_angle = (360.0 - abs(turn_angle)) * (abs(turn_angle)//turn_angle) * (-1)
+
+            print(turn_angle, velocity)
+        i+=1
+        
+
 def heuristic(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
