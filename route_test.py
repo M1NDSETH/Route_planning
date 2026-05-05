@@ -1,10 +1,11 @@
-from Route import AUV,GRID,visualize
+from Route import AUV, GRID, visualize, angle_velocity_output
 import random
 import time
 
 def main():
     grid_size_x = 1000
     grid_size_y = 500
+    velocity = 20
     pillars=[]
     for i in range(3):
         pillars.append((random.randint(1,999),random.randint(1,499)))
@@ -18,11 +19,16 @@ def main():
     
     grid.obstacles_creation(AUV_size)
     
-    start_time = time.perf_counter()    
+    start_time = time.perf_counter()  
     path = VELT.build_full_route(grid.targets, grid)
     end_time = time.perf_counter()
     print(end_time - start_time)
     if path:
         print("Path length:", len(path))
+        
+        angle_velocity_output(path, velocity)
+        
         visualize(grid.field, path, grid.targets)
-main()
+        
+    
+main()  
