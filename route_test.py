@@ -22,7 +22,7 @@ def main():
     start_time = time.perf_counter()  
     path = VELT.build_full_route(grid.targets, grid)
     end_time = time.perf_counter()
-    print(end_time - start_time)
+    print("Time: ", end_time - start_time)
     if path:
         print("Path length:", len(path))
         
