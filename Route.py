@@ -9,13 +9,18 @@ import copy
 
 def angle_velocity_output(path, velocity):
     i = 0
-    print("Point    Angle    Velocity")
+    headers = ["Point", "Angle", "Velocity"]
+    print(f"{headers[0]:<20}{headers[1]:>12}{headers[2]:>12}")
+    
     while i <= len(path) - 2:
         dx = path[i+1][0] - path[i][0]
         dy = path[i+1][1] - path[i][1]
         if i == 0:
             current_angle = math.degrees(math.atan(dy / dx) * (-1))
-            print(path[i], current_angle, velocity)
+
+            point_str = f"{path[i][0]}, {path[i][1]}"
+            print(f"{point_str:<20}{current_angle:>12.2f}{velocity:>12}")
+            
         else:
             prev_angle = current_angle
 
@@ -32,8 +37,9 @@ def angle_velocity_output(path, velocity):
 
             if 360.0 - abs(turn_angle) < abs(turn_angle) and turn_angle != 0:
                 turn_angle = (360.0 - abs(turn_angle)) * (abs(turn_angle)//turn_angle) * (-1)
-
-            print(path[i], turn_angle, velocity)
+            
+            point_str = f"{path[i][0]}, {path[i][1]}"
+            print(f"{point_str:<20}{turn_angle:>12.2f}{velocity:>12}")
         i+=1
         
 
