@@ -9,11 +9,11 @@ There are two classes implemented in this program:
 
 ## START OF PROGRAM
 
-Before starting the program, the user sets the coordinates of the starting point of the device (*start_point*), the size of the grid of the program (*grid_size_x, grid_size_y*), the coordinates targets.
+Before starting the program, the user sets the coordinates of the starting point of the device (*start_point*), the size of the grid of the program (*grid_size_x, grid_size_y*) in test file. Program generates random coordinates of 3 target points and 10 obstacles point.
 
 ## PROGRAM OPERATION
 
-After starting work, the program builds the shortest route from the starting point to the targets using the A* algorithm. By default the device can move in 8 directions (*directions* list): 4 along the X and Y axes and 4 at an angle of 45 degrees to the axes. The device moves ONLY through cells with integer coordinates in the grid.
+After starting work, the program builds the shortest route from the starting point to the targets using the Theta* algorithm and return *path* - list of points, that vehicle must to go through. The device moves ONLY through cells with integer coordinates in the grid. After building full route, program publishes time, what has been used to build a path, number of points included in full route, angles for all rotations.
 
 ## CUSTOMIZATION
 
