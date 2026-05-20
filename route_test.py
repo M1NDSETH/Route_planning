@@ -15,7 +15,7 @@ def main():
         pillars.append((random.randint(1,999),random.randint(1,499)))
 
     obstacles = []
-    for i in range(10):
+    for i in range(40):
         obstacles.append((random.randint(1,999),random.randint(1,499)))
 
     AUV_size = size_calculation(length, width) + distance_reserve
