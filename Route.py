@@ -99,7 +99,7 @@ class GRID:
         self.obstacles = obstacles
         self.field = np.zeros((x_size, y_size))
     def obstacles_creation(self,inflation_size):
-        inflation_size = int(inflation_size)
+        inflation_size = int(inflation_size) // 2
         for point in self.obstacles:
             i = max(0, point[0] - inflation_size)
             while i <= min(point[0] + inflation_size, self.x_size - 1):
