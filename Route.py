@@ -47,6 +47,9 @@ def heuristic(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
 
+def size_calculation(length, width):
+    return  math.sqrt(length ** 2 + width ** 2)
+
 def bresenham(x0,y0,x1,y1):
     cells =[]
     dx = abs(x1-x0)
@@ -96,6 +99,7 @@ class GRID:
         self.obstacles = obstacles
         self.field = np.zeros((x_size, y_size))
     def obstacles_creation(self,inflation_size):
+        inflation_size = int(inflation_size)
         for point in self.obstacles:
             i = max(0, point[0] - inflation_size)
             while i <= min(point[0] + inflation_size, self.x_size - 1):

@@ -1,4 +1,4 @@
-from Route import AUV, GRID, visualize, angle_velocity_output
+from Route import AUV, GRID, visualize, angle_velocity_output, size_calculation
 import random
 import time
 
@@ -6,6 +6,10 @@ def main():
     grid_size_x = 1000
     grid_size_y = 500
     velocity = 20
+    length = 40
+    width = 6
+    distance_reserve = 5
+
     pillars=[]
     for i in range(3):
         pillars.append((random.randint(1,999),random.randint(1,499)))
@@ -13,10 +17,11 @@ def main():
     obstacles = []
     for i in range(10):
         obstacles.append((random.randint(1,999),random.randint(1,499)))
-    AUV_size = 30
+
+    AUV_size = size_calculation(length, width) + distance_reserve
     VELT=AUV((1,1), AUV_size)
+
     grid = GRID(grid_size_x, grid_size_y, pillars, obstacles)
-    
     grid.obstacles_creation(AUV_size)
     
     start_time = time.perf_counter()  
