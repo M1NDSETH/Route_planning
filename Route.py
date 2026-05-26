@@ -6,6 +6,19 @@ import copy
 
 
 
+def valid_move(grid_field, current, neighbor):
+    x0, y0 = current
+    x1, y1 = neighbor
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    if dx!=0 and dy!=0:
+        if grid_field[x0 + dx][y0] == 1 or grid_field[x0][y0 + dy]:
+            return False
+    return True
+
+
 
 def angle_velocity_output(path, velocity):
     i = 0
@@ -73,18 +86,10 @@ def bresenham(x0,y0,x1,y1):
 
 def line_of_sight(grid_field, x0, y0, x1, y1):
     cells = bresenham(x0, y0, x1, y1)
-    for i in range(len(cells)):
-        x, y = cells[i]
+    for x,y in cells:
         if 0 <= x < grid_field.shape[0] and 0 <= y < grid_field.shape[1]:
             if grid_field[x][y] == 1:
                 return False
-            if i > 0:
-                prev_x, prev_y = cells[i-1]
-                dx = x - prev_x
-                dy = y - prev_y
-                if dx!=0 and dy!=0:
-                    if grid_field[prev_x + dx][prev_y] == 1 or grid_field[prev_x][prev_y + dy] == 1:
-                        return False
         else:
             return False
         
@@ -144,10 +149,14 @@ def theta_star(start, goal, grid):
     heapq.heappush(open_set, (0, start))
     came_from = {start: start} 
     g_score = {start: 0}
+    closed_set = set()
     directions = [(-1,0),(1,0),(0,-1),(0,1),
                   (-1,-1),(-1,1),(1,-1),(1,1)]
     while open_set:
         _, current = heapq.heappop(open_set)
+        if current in closed_set:
+            continue
+        closed_set.add(current)
         if current == goal:
             path = []
             while current != came_from[current]:
@@ -161,6 +170,8 @@ def theta_star(start, goal, grid):
             if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
                 continue
             if grid.field[neighbor[0]][neighbor[1]] == 1:
+                continue
+            if not valid_move(grid.field, current, neighbor):
                 continue
             parent = came_from[current]
             if line_of_sight(grid.field, parent[0], parent[1], neighbor[0], neighbor[1]):
