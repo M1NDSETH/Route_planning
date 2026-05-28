@@ -4,13 +4,13 @@
 #include <vector>
 #include <cstdint>
 
-// Опережающее объявление структуры Point, так как она нужна в классе GRID
+// Структура точки пространства
 struct Point {
     int x;
     int y;
 };
 
-// Прототип функции Bresenham, так как она вызывается внутри методов GRID
+// Прототип функции Bresenham
 std::vector<Point> bresenham(Point start, Point finish);
 
 // Класс сетки точек пространства
@@ -20,9 +20,8 @@ public:
     std::vector<Point> targets, obstacles;
     std::vector<uint8_t> field;
 
-    GRID(int grid_x_size, int grid_y_size, std::vector<Point> grid_targets, std::vector<Point> grid_obstacles, int inflation_size);
+    GRID(int grid_x_size, int grid_y_size, std::vector<Point> grid_targets, std::vector<Point> grid_obstacles);
 
-    // Преобразование координат точки в индекс в сетке
     inline int index(Point p) const {
         return p.y * x_size + p.x;
     }
@@ -33,39 +32,30 @@ public:
         return (x >= 0 && x < x_size && y >= 0 && y < y_size); 
     }
 
-    // Проверка corner cutting
     bool valid_move(Point current, Point neighbor);
-    
-    // Проверка линии взгляда LOS
     bool line_of_sight(Point parent, Point neighbor, std::vector<uint8_t> clean_field);
 };
 
-// Вспомогательные функции
 int max(int a, int b);
 int min(int a, int b);
 int heuristic(int x0, int y0, int x1, int y1);
 
-// Надувание препятствий
-void obstacles_inflation(std::vector<uint8_t> field, GRID grid, Point center, int radius);
+// Надувание препятствий (передача field строго по ссылке &)
+void obstacles_inflation(std::vector<uint8_t>& field, GRID grid, Point center, int radius);
 
-// Алгоритм поиска пути Theta*
+// Поиск пути Theta*
 std::vector<Point> theta_star(Point start, Point target, GRID grid, std::vector<uint8_t> temp_field);
 
 // Класс аппарата
 class AUV {
 public:
-
     Point start_point;
     int radius;
 
     AUV(Point start, double length, double weight);
-
     std::vector<Point> build_full_route(std::vector<Point> targets, GRID grid);
 };
 
-
-
-// Вывод углов поворота по маршруту
 void angle_velocity_output(std::vector<Point> path, int velocity);
 
 #endif // ROUTE_H
