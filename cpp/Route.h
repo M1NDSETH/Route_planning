@@ -53,16 +53,17 @@ std::vector<Point> theta_star(Point start, Point target, GRID grid, std::vector<
 
 // Класс аппарата
 class AUV {
-private:
-    Point start_point;
-    int size;
-
 public:
+
+    Point start_point;
+    int radius;
+
+    AUV(Point start, double length, double weight);
+
     std::vector<Point> build_full_route(std::vector<Point> targets, GRID grid);
 };
 
-// Вычисление размера аппарата
-double size_calculation(double length, double weight);
+
 
 // Вывод углов поворота по маршруту
 void angle_velocity_output(std::vector<Point> path, int velocity);

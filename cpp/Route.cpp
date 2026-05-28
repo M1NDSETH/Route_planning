@@ -6,12 +6,8 @@
 #include <iostream>
 
 
-//структура точки пространства
-struct Point
-{
-    int x;
-    int y;
-};
+
+
 
 //вспомогательные функции
 int max(int a, int b){
@@ -23,6 +19,7 @@ int min(int a, int b){
 int heuristic(int x0, int y0, int x1, int y1){
     return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
 }
+
 
 //надувание препятствий
 void obstacles_inflation(std::vector <uint8_t> field, GRID grid, Point center, int radius){
@@ -38,6 +35,8 @@ void obstacles_inflation(std::vector <uint8_t> field, GRID grid, Point center, i
     }
 }
 
+
+//главный алгоритм поиска пути THETA*
 std::vector <Point> theta_star(Point start, Point target, GRID grid, std::vector <uint8_t> temp_field){
     int size = grid.x_size * grid.y_size;
     std::vector <double> g_score(size, INFINITY);
@@ -125,37 +124,19 @@ std::vector <Point> theta_star(Point start, Point target, GRID grid, std::vector
     return {};
 }
 
-
-//класс сетки точек пространства
-class GRID {
-    public:
-         
-        int x_size, y_size;
-        std::vector <Point> targets, obstacles;
-        std::vector <uint8_t> field;
-
-        //преобразование координат точки в индекс в сетке
-        inline int index(Point p) const{
-            return p.y * x_size + p.x;
-        }
-        inline int index(int x, int y) const{
-            return y * x_size + x;
-        }
-        inline bool inside(int x, int y) const{
-            return (x >= 0 && x < x_size && y >= 0 && y < y_size);
-        }
-        
-        GRID(int grid_x_size, int grid_y_size, std::vector<Point> grid_targets, std::vector<Point> grid_obstacles, int inflation_size){
+//конструктор класса сетки
+GRID::GRID(int grid_x_size, int grid_y_size, std::vector<Point> grid_targets, std::vector<Point> grid_obstacles, int inflation_size){
             x_size = grid_x_size;
             y_size = grid_y_size;
             targets = grid_targets;
             obstacles = grid_obstacles;
             field.resize(grid_x_size * grid_y_size, 0);
+            
         }
 
-        
-        //проверка corner cutting
-        bool valid_move(Point current, Point neighbor){
+
+//проверка corner cutting
+bool GRID::valid_move(Point current, Point neighbor){
             int x0 = current.x;
             int y0 = current.y;
             int x1 = neighbor.x;
@@ -166,8 +147,10 @@ class GRID {
             }
             return true;
         }
-        //проверка линии взгляда LOS
-        bool line_of_sight(Point parent, Point neighbor, std::vector <uint8_t> clean_field){
+
+
+//проверка линии видимости
+bool GRID::line_of_sight(Point parent, Point neighbor, std::vector <uint8_t> clean_field){
             std::vector <Point> cells = bresenham(parent,neighbor);
             for (size_t i = 0; i < cells.size() - 1; i++){
                 if (inside(cells[i].x, cells[i].y)){
@@ -178,24 +161,16 @@ class GRID {
             return true;
         }
 
-};
 
-//класс аппарата
-class AUV{
-    private:
-    Point start_point;
-    int size;
-
-    public:
-
-    std::vector <Point> build_full_route(std::vector <Point> targets, GRID grid){
+//метод построения пути по целям
+std::vector <Point> AUV::build_full_route(std::vector <Point> targets, GRID grid){
         std::vector <Point> full_path;
         Point current = start_point;
         for (size_t i = 0; i < targets.size(); i++){
             Point current_target = targets[i];
             std::vector <uint8_t> temp_field(grid.x_size * grid.y_size, 0);
             for (size_t j = i + 1; j < targets.size(); j++){
-                obstacles_inflation(temp_field, grid, targets[j], size / 2);
+                obstacles_inflation(temp_field, grid, targets[j], radius);
             }
             std::vector <Point> path_segment = theta_star(current, current_target, grid, temp_field);
             if (path_segment.empty()){
@@ -211,15 +186,13 @@ class AUV{
         }
         return full_path;
     }
-};
 
 
-
-//вычисление размера аппарата
-double size_calculation(double length, double weight){
-    double size = sqrt(length * length + weight * weight);
-    return size;
+AUV::AUV(Point start, double length, double weight){
+    start_point = start;
+    radius = 0,5 * sqrt(length * length + weight * weight);
 }
+
 
 //список точек, которые приблизительно образуют прямую между 2 точками
 std::vector <Point> bresenham(Point start, Point finish){
@@ -251,6 +224,7 @@ std::vector <Point> bresenham(Point start, Point finish){
 
     return cells;
 }
+
 
 //вывод углов поворота по маршруту
 void angle_velocity_output(std::vector <Point> path, int velocity){
