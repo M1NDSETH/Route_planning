@@ -36,6 +36,9 @@ public:
     bool line_of_sight(Point parent, Point neighbor, std::vector<uint8_t> clean_field);
 };
 
+inline double metres_to_grid_units(double dist, double K){
+    return dist * K;
+}
 int max(int a, int b);
 int min(int a, int b);
 int heuristic(int x0, int y0, int x1, int y1);

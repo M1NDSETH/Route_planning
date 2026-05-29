@@ -23,7 +23,6 @@ void obstacles_inflation(std::vector<uint8_t>& field, GRID grid, Point center, i
             if (!grid.inside(x, y)) {
                 continue;
             }
-            // Радиус сравнивается с квадратом расстояния
             if (heuristic(center.x, center.y, x, y) <= radius * radius) {
                 field[grid.index(x, y)] = 1;
             }
@@ -66,7 +65,7 @@ std::vector<Point> theta_star(Point start, Point target, GRID grid, std::vector<
             std::vector<Point> path;
             Point p = target;
             while (!(p.x == start.x && p.y == start.y)) {
-                path.push_back(p); // ИСПРАВЛЕНО: сохраняем текущую точку пути, а не старт
+                path.push_back(p);
                 p = parents[grid.index(p)];
             }
             path.push_back(start);
