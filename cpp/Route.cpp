@@ -136,7 +136,7 @@ bool GRID::line_of_sight(Point parent, Point neighbor, std::vector<uint8_t> clea
     std::vector<Point> cells = bresenham(parent, neighbor);
     for (size_t i = 0; i < cells.size(); i++) {
         if (inside(cells[i].x, cells[i].y)) {
-            if (clean_field[index(cells[i])] == 1) {
+            if (clean_field[index(cells[i])] == 1 || field[index(cells[i])] == 1) {
                 return false;
             }
         } else {
