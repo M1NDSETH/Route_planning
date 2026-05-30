@@ -8,10 +8,6 @@
 
 
 
-int heuristic(int x0, int y0, int x1, int y1) {
-    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
-}
-
 void obstacles_inflation(std::vector<uint8_t>& field, GRID grid, Point center, int radius) {
     for (int x = center.x - radius; x <= center.x + radius; x++) {
         for (int y = center.y - radius; y <= center.y + radius; y++) {

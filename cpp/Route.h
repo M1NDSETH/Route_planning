@@ -40,7 +40,9 @@ inline double metres_to_grid_units(double dist, double K){
     return dist * K;
 }
 
-int heuristic(int x0, int y0, int x1, int y1);
+inline int heuristic(int x0, int y0, int x1, int y1) {
+    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
+}
 
 // Надувание препятствий 
 void obstacles_inflation(std::vector<uint8_t>& field, GRID grid, Point center, int radius);
