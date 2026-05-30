@@ -5,13 +5,8 @@
 #include <algorithm>
 #include <iostream>
 
-int max(int a, int b) {
-    return (a < b) ? b : a;
-}
 
-int min(int a, int b) {
-    return (a < b) ? a : b;
-}
+
 
 int heuristic(int x0, int y0, int x1, int y1) {
     return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);

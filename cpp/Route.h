@@ -39,11 +39,10 @@ public:
 inline double metres_to_grid_units(double dist, double K){
     return dist * K;
 }
-int max(int a, int b);
-int min(int a, int b);
+
 int heuristic(int x0, int y0, int x1, int y1);
 
-// Надувание препятствий (передача field строго по ссылке &)
+// Надувание препятствий 
 void obstacles_inflation(std::vector<uint8_t>& field, GRID grid, Point center, int radius);
 
 // Поиск пути Theta*
@@ -61,4 +60,4 @@ public:
 
 void angle_velocity_output(std::vector<Point> path, int velocity);
 
-#endif // ROUTE_H
+#endif
