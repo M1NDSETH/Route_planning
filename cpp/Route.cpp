@@ -160,11 +160,12 @@ std::vector<Point> AUV::build_full_route(std::vector<Point> targets, GRID grid) 
     return full_path;
 }
 
-// Конструктор с приведением типов и округлением вверх (ceil)
-AUV::AUV(Point start, double length, double weight) {
+
+AUV::AUV(Point start, double length, double weight, double max_vel, double min_vel) {
     start_point = start;
-    // std::ceil округлит, например, 10.1 до 11.0, чтобы радиус робота брался с безопасным запасом
     radius = static_cast<int>(std::ceil(0.5 * sqrt(length * length + weight * weight)));
+    max_velocity = max_vel;
+    min_velocity = min_vel;
 }
 
 std::vector<Point> bresenham(Point start, Point finish) {
@@ -193,7 +194,7 @@ std::vector<Point> bresenham(Point start, Point finish) {
     return cells;
 }
 
-void angle_velocity_output(std::vector<Point> path, int velocity){
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel){
     size_t i = 0;
     double current = 0;
     std::cout << "Point               " << "       Angle" << "    Velocity" << std::endl;
@@ -201,6 +202,7 @@ void angle_velocity_output(std::vector<Point> path, int velocity){
     while (i < path.size() - 1) { 
         double dx = static_cast<double>(path[i + 1].x - path[i].x);
         double dy = static_cast<double>(path[i + 1].y - path[i].y);
+        double velocity = 0.0;
         
         if (i == 0) {
             if (dx == 0) {
@@ -235,7 +237,8 @@ void angle_velocity_output(std::vector<Point> path, int velocity){
             if (360.0 - std::abs(turn_angle) < std::abs(turn_angle)) {
                 turn_angle = (360.0 - std::abs(turn_angle)) * (std::abs(turn_angle) / turn_angle) * (-1.0);
             }
-            
+
+            velocity = min_vel + (max_vel - min_vel) * cos(0.5 * turn_angle * M_PI / 180);
             std::cout << path[i + 1].x << ", " << path[i + 1].y << "         " << turn_angle << "           " << velocity << std::endl;
             i++; 
         }

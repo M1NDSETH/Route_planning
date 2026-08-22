@@ -55,11 +55,13 @@ class AUV {
 public:
     Point start_point;
     int radius;
+    double max_velocity;
+    double min_velocity;
 
-    AUV(Point start, double length, double weight);
+    AUV(Point start, double length, double weight, double max_vel, double min_vel);
     std::vector<Point> build_full_route(std::vector<Point> targets, GRID grid);
 };
 
-void angle_velocity_output(std::vector<Point> path, int velocity);
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel);
 
 #endif
