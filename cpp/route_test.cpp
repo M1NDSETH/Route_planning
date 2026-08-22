@@ -55,7 +55,6 @@ int main() {
     if (full_route.empty()) {
         std::cout << "Path Not Found" << std::endl;
     } else {
-        std::cout << "X  Y  Angle  Velocity" << std::endl;
         angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity);
     }
 
