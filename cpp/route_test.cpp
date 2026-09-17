@@ -26,6 +26,8 @@ int main() {
     double pool_width = 25.0;
     double max_vel = 1.0;
     double min_vel = 0.1;
+    double max_angle_vel = 60.0;
+    double min_angle_vel = 5.0;
     
     Point start_pos = {1, 1};
     
@@ -55,7 +57,7 @@ int main() {
     if (full_route.empty()) {
         std::cout << "Path Not Found" << std::endl;
     } else {
-        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity);
+        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity, max_angle_vel, min_angle_vel);
     }
 
 

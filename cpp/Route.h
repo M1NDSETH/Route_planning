@@ -69,6 +69,6 @@ public:
 };
 
 // Вывод скорости и угла поворота для каждой точки
-void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel);
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel);
 
 #endif

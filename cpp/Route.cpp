@@ -170,8 +170,8 @@ AUV::AUV(Point start, double length, double weight, double max_vel, double min_v
 
 std::vector<Point> bresenham(Point start, Point finish) {
     std::vector<Point> cells;
-    int dx = abs(finish.x - start.x);
-    int dy = abs(finish.y - start.y);
+    int dx = std::abs(finish.x - start.x);
+    int dy = std::abs(finish.y - start.y);
     int Sx = (start.x < finish.x) ? 1 : -1;
     int Sy = (start.y < finish.y) ? 1 : -1;
     int err = dx - dy;
@@ -201,7 +201,7 @@ double normalize_angle(double angle) {
     return angle;
 }
 
-void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel) {
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel) {
     if (path.empty()) return;
 
     if (path.size() == 1) {
@@ -214,10 +214,12 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
     std::vector<double> velocities(n, 0.0);
     std::vector<double> x_vel(n, 0.0);
     std::vector<double> y_vel(n, 0.0);
+    std::vector<double> angle_vel(n, 0.0);
 
     double first_dx = path[1].x - path[0].x;
     double first_dy = path[1].y - path[0].y;
     turn_angles[0] = normalize_angle(-(std::atan2(first_dy, first_dx) * 180.0 / M_PI));
+    angle_vel[0] = min_angle_vel + (std::abs(turn_angles[0]) / 180.0) * (max_angle_vel - min_angle_vel);
 
     for (size_t i = 1; i < n - 1; ++i) {
         double in_dx = path[i].x - path[i - 1].x;
@@ -230,6 +232,7 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
         double out_angle = std::atan2(out_dy, out_dx) * 180.0 / M_PI;
 
         turn_angles[i] = normalize_angle(in_angle - out_angle);
+        angle_vel[i] = min_angle_vel + (std::abs(turn_angles[i]) / 180.0) * (max_angle_vel - min_angle_vel);
     }
 
     turn_angles[n - 1] = 0.0;
@@ -239,8 +242,8 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
             double next_turn = turn_angles[i + 1];
             velocities[i] = min_vel + (max_vel - min_vel) * std::cos(0.5 * next_turn * M_PI / 180.0);
             double out_angle = abs(turn_angles[0]) * M_PI / 180.0;
-            x_vel[i] = velocities[i] * cos(out_angle);
-            y_vel[i] = velocities[i] * sin(out_angle);
+            x_vel[i] = velocities[i] * std::cos(out_angle);
+            y_vel[i] = velocities[i] * std::sin(out_angle);
         }
         else{
             double out_dx = path[i + 1].x - path[i].x;
@@ -249,17 +252,18 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
 
             double next_turn = turn_angles[i + 1];
             velocities[i] = min_vel + (max_vel - min_vel) * std::cos(0.5 * next_turn * M_PI / 180.0);
-            x_vel[i] = velocities[i] * cos(out_angle);
-            y_vel[i] = velocities[i] * sin(out_angle);
+            x_vel[i] = velocities[i] * std::cos(out_angle);
+            y_vel[i] = velocities[i] * std::sin(out_angle);
         }
         
     }
 
     velocities[n - 1] = 0.0; 
-    std::cout << "Point\t\t" << "Turn Angle\t" << "Velocity after Point" << std::endl;
+    angle_vel[n - 1] = 0.0;
+    std::cout << "Point\t\t" << "Turn Angle\t" << "Velocity after Point\t" << "Angle Velocity" << std::endl;
     for (size_t i = 0; i < n; ++i) {
         std::cout << path[i].x << ", " << path[i].y << "\t\t" 
-                  << turn_angles[i] << "\t\t\t" << velocities[i] << ", " << x_vel[i] << ", " << y_vel[i] << std::endl;
+                  << turn_angles[i] << "\t\t\t" << velocities[i] << ", " << x_vel[i] << ", " << y_vel[i] << "\t\t" << angle_vel[i] << std::endl;
     }
 } 
 
