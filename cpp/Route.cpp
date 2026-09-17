@@ -212,6 +212,8 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
     size_t n = path.size();
     std::vector<double> turn_angles(n, 0.0);
     std::vector<double> velocities(n, 0.0);
+    std::vector<double> x_vel(n, 0.0);
+    std::vector<double> y_vel(n, 0.0);
 
     double first_dx = path[1].x - path[0].x;
     double first_dy = path[1].y - path[0].y;
@@ -233,15 +235,31 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
     turn_angles[n - 1] = 0.0;
 
     for (size_t i = 0; i < n - 1; ++i) {
-        double next_turn = turn_angles[i + 1];
-        velocities[i] = min_vel + (max_vel - min_vel) * std::cos(0.5 * next_turn * M_PI / 180.0);
+        if (i == 0){
+            double next_turn = turn_angles[i + 1];
+            velocities[i] = min_vel + (max_vel - min_vel) * std::cos(0.5 * next_turn * M_PI / 180.0);
+            double out_angle = abs(turn_angles[0]) * M_PI / 180.0;
+            x_vel[i] = velocities[i] * cos(out_angle);
+            y_vel[i] = velocities[i] * sin(out_angle);
+        }
+        else{
+            double out_dx = path[i + 1].x - path[i].x;
+            double out_dy = path[i + 1].y - path[i].y;
+            double out_angle = std::atan2(out_dy, out_dx);
+
+            double next_turn = turn_angles[i + 1];
+            velocities[i] = min_vel + (max_vel - min_vel) * std::cos(0.5 * next_turn * M_PI / 180.0);
+            x_vel[i] = velocities[i] * cos(out_angle);
+            y_vel[i] = velocities[i] * sin(out_angle);
+        }
+        
     }
 
     velocities[n - 1] = 0.0; 
     std::cout << "Point\t\t" << "Turn Angle\t" << "Velocity after Point" << std::endl;
     for (size_t i = 0; i < n; ++i) {
         std::cout << path[i].x << ", " << path[i].y << "\t\t" 
-                  << turn_angles[i] << "\t\t\t" << velocities[i] << std::endl;
+                  << turn_angles[i] << "\t\t\t" << velocities[i] << ", " << x_vel[i] << ", " << y_vel[i] << std::endl;
     }
 } 
 
