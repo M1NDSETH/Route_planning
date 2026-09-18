@@ -32,19 +32,21 @@ int main() {
     Point start_pos = {1, 1};
     
     std::vector<Point> obstacles;
-    for (int i = 0; i < 40; i++){
-        int x = distr_x(gen);
-        int y = distr_y(gen);
-        Point point = {x, y};
-        obstacles.push_back(point);
-    }
+    Point obst = {999, 999};
+    obstacles.push_back(obst);
+    // for (int i = 0; i < 40; i++){
+    //     int x = distr_x(gen);
+    //     int y = distr_y(gen);
+    //     Point point = {x, y};
+    //     obstacles.push_back(point);
+    // }
     
     GRID grid(metres_to_grid_units(pool_length, K_units), metres_to_grid_units(pool_width, K_units), targets, obstacles);
     AUV VELT(start_pos, metres_to_grid_units(AUV_length, K_units), 
              metres_to_grid_units(AUV_width, K_units), metres_to_grid_units(max_vel, K_units), 
              metres_to_grid_units(min_vel, K_units), max_angle_vel, min_angle_vel);
     
-    for (int i = 0; i < 40; i++){
+    for (int i = 0; i < 1; i++){
         obstacles_inflation(grid.field, grid, obstacles[i], VELT.radius);
     }
     
