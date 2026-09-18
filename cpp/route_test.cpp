@@ -40,7 +40,9 @@ int main() {
     }
     
     GRID grid(metres_to_grid_units(pool_length, K_units), metres_to_grid_units(pool_width, K_units), targets, obstacles);
-    AUV VELT(start_pos, metres_to_grid_units(AUV_length, K_units), metres_to_grid_units(AUV_width, K_units), metres_to_grid_units(max_vel, K_units), metres_to_grid_units(min_vel, K_units));
+    AUV VELT(start_pos, metres_to_grid_units(AUV_length, K_units), 
+             metres_to_grid_units(AUV_width, K_units), metres_to_grid_units(max_vel, K_units), 
+             metres_to_grid_units(min_vel, K_units), max_angle_vel, min_angle_vel);
     
     for (int i = 0; i < 40; i++){
         obstacles_inflation(grid.field, grid, obstacles[i], VELT.radius);
@@ -57,7 +59,7 @@ int main() {
     if (full_route.empty()) {
         std::cout << "Path Not Found" << std::endl;
     } else {
-        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity, max_angle_vel, min_angle_vel);
+        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity, VELT.max_angle_velocity, VELT.min_angle_velocity);
     }
 
 

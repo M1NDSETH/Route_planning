@@ -161,11 +161,13 @@ std::vector<Point> AUV::build_full_route(std::vector<Point> targets, GRID grid) 
 }
 
 
-AUV::AUV(Point start, double length, double weight, double max_vel, double min_vel) {
+AUV::AUV(Point start, double length, double weight, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel) {
     start_point = start;
     radius = static_cast<int>(std::ceil(0.5 * sqrt(length * length + weight * weight)));
     max_velocity = max_vel;
     min_velocity = min_vel;
+    max_angle_velocity = max_angle_vel;
+    min_angle_velocity = min_angle_vel;
 }
 
 std::vector<Point> bresenham(Point start, Point finish) {

@@ -63,8 +63,10 @@ public:
     int radius;
     double max_velocity;
     double min_velocity;
+    double max_angle_velocity;
+    double min_angle_velocity;
 
-    AUV(Point start, double length, double weight, double max_vel, double min_vel);
+    AUV(Point start, double length, double weight, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel);
     std::vector<Point> build_full_route(std::vector<Point> targets, GRID grid);
 };
 
