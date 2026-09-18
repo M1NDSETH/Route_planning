@@ -45,6 +45,9 @@ public:
 inline double metres_to_grid_units(double dist, double K){
     return dist * K;
 }
+inline double grid_units_to_metres(double dist, double K){
+    return dist / K;
+}
 // Расстояние между точками
 inline int heuristic(int x0, int y0, int x1, int y1) {
     return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
@@ -71,6 +74,6 @@ public:
 };
 
 // Вывод скорости и угла поворота для каждой точки
-void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel);
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel, double K);
 
 #endif

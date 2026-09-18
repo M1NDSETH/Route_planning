@@ -61,7 +61,7 @@ int main() {
     if (full_route.empty()) {
         std::cout << "Path Not Found" << std::endl;
     } else {
-        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity, VELT.max_angle_velocity, VELT.min_angle_velocity);
+        angle_velocity_output(full_route, VELT.max_velocity, VELT.min_velocity, VELT.max_angle_velocity, VELT.min_angle_velocity, K_units);
     }
 
 

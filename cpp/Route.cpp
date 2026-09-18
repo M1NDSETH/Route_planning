@@ -203,7 +203,7 @@ double normalize_angle(double angle) {
     return angle;
 }
 
-void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel) {
+void angle_velocity_output(std::vector<Point> path, double max_vel, double min_vel, double max_angle_vel, double min_angle_vel, double K) {
     if (path.empty()) return;
 
     if (path.size() == 1) {
@@ -265,7 +265,9 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
     std::cout << "Point\t\t" << "Turn Angle\t" << "Velocity after Point\t" << "Angle Velocity" << std::endl;
     for (size_t i = 0; i < n; ++i) {
         std::cout << path[i].x << ", " << path[i].y << "\t\t" 
-                  << turn_angles[i] << "\t\t\t" << velocities[i] << ", " << x_vel[i] << ", " << y_vel[i] << "\t\t" << angle_vel[i] << std::endl;
+                  << turn_angles[i] << "\t\t\t" << grid_units_to_metres(velocities[i], K) 
+                  << ", " << grid_units_to_metres(x_vel[i], K) << ", " << grid_units_to_metres(y_vel[i], K) 
+                  << "\t\t" << angle_vel[i] << std::endl;
     }
 } 
 
