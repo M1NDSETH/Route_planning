@@ -219,7 +219,7 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
     double first_dx = path[1].x - path[0].x;
     double first_dy = path[1].y - path[0].y;
     turn_angles[0] = normalize_angle(-(std::atan2(first_dy, first_dx) * 180.0 / M_PI));
-    angle_vel[0] = min_angle_vel + (std::abs(turn_angles[0]) / 180.0) * (max_angle_vel - min_angle_vel);
+    angle_vel[0] = std::copysign(1.0, turn_angles[0]) * (min_angle_vel + (std::abs(turn_angles[0]) / 180.0) * (max_angle_vel - min_angle_vel));
 
     for (size_t i = 1; i < n - 1; ++i) {
         double in_dx = path[i].x - path[i - 1].x;
@@ -232,7 +232,7 @@ void angle_velocity_output(std::vector<Point> path, double max_vel, double min_v
         double out_angle = std::atan2(out_dy, out_dx) * 180.0 / M_PI;
 
         turn_angles[i] = normalize_angle(in_angle - out_angle);
-        angle_vel[i] = min_angle_vel + (std::abs(turn_angles[i]) / 180.0) * (max_angle_vel - min_angle_vel);
+        angle_vel[i] = std::copysign(1.0, turn_angles[i]) * (min_angle_vel + (std::abs(turn_angles[i]) / 180.0) * (max_angle_vel - min_angle_vel));
     }
 
     turn_angles[n - 1] = 0.0;
