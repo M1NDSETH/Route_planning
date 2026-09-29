@@ -17,7 +17,7 @@ int main() {
 
     std::vector<Point> targets;
     targets.push_back({999, 499});
-    targets.push_back({500, 250});
+    targets.push_back({600, 250});
     targets.push_back({20, 400});
 
     double AUV_length = 1.0;
