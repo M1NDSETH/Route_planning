@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
         canvas.cpp
         canvas.h
         ${ALGORITHM_DIR}/Route.cpp
+	${ALGORITHM_DIR}/scenario.cpp
 )
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(cpp_visualiser
