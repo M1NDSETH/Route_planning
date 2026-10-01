@@ -28,7 +28,7 @@ private:
     Point start_pos_{0, 0};
     bool get_grid_ = false;
 
-    double cell_size_ = 1.0;
+    double cell_size_ = 2.0;
 
 };
 #endif // CANVAS_H

@@ -6,7 +6,7 @@
 Canvas::Canvas(QWidget *parent)
     : QWidget(parent)
 {
-    setMinimumSize(800, 600);
+    setMinimumSize(2000, 1000);
     setWindowTitle("Theta * visualiser");
 }
 
@@ -14,9 +14,10 @@ void Canvas::setGrid(const GRID &grid){
     grid_ = grid;
     get_grid_ = true;
 
-    double Sx = double(width())  / grid_->x_size;
-    double Sy = double(height()) / grid_->y_size;
-    cell_size_ = std::min(Sx, Sy);
+    cell_size_ = 2.0;
+    //double Sx = double(width())  / grid_->x_size;
+    //double Sy = double(height()) / grid_->y_size;
+    //cell_size_ = std::min(Sx, Sy);
 
     update();
 }
@@ -44,7 +45,7 @@ void Canvas::paintEvent(QPaintEvent *event){
         p.translate(0, grid_->y_size * cell_size_);
         p.scale(1, -1);
         p.setPen(Qt::NoPen);
-        p.setBrush(QColor(60, 60, 60));
+        p.setBrush(QColor(100, 100, 100));
         for (int x = 0; x < grid_->x_size; ++x) {
             for (int y = 0; y < grid_->y_size; ++y) {
                 if (grid_->field[grid_->index(x, y)] == 1) {
@@ -53,7 +54,7 @@ void Canvas::paintEvent(QPaintEvent *event){
             }
         }
 
-        p.setPen(QPen(QColor(220, 220, 220), 0.5));
+        p.setPen(QPen(QColor(100, 100, 100), 0.5));
         for (int x = 0; x <= grid_->x_size; ++x) {
             p.drawLine(QPointF(x * cell_size_, 0),
                        QPointF(x * cell_size_, grid_->y_size * cell_size_));
