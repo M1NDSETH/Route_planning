@@ -22,14 +22,14 @@ Scenario run_scenario(){
         {500, 250},
         {20, 400}
     };
-    std::vector<Point> obstacles = {{999, 999}};
-    // std::random_device rd;
-    // std::mt19937 gen(rd());
-    // std::uniform_int_distribution<> dx(1, 999);
-    // std::uniform_int_distribution<> dy(1, 499);
-    // for (int i = 0; i < 40; ++i) {
-    //     obstacles.push_back({dx(gen), dy(gen)});
-    // }
+    std::vector<Point> obstacles;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dx(1, 999);
+    std::uniform_int_distribution<> dy(1, 499);
+    for (int i = 0; i < 250; ++i) {
+        obstacles.push_back({dx(gen), dy(gen)});
+    }
     GRID grid(
         static_cast<int>(metres_to_grid_units(pool_length, K_units)),
         static_cast<int>(metres_to_grid_units(pool_width,  K_units)),
